@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduFocus AI – Smart Classroom Attention Monitoring</title>
+  <meta name="description"
+    content="EduFocus AI uses computer vision and deep learning to monitor student attention in real-time, empowering educators with AI-driven classroom insights." />
+  <meta name="keywords"
+    content="EduFocus AI, classroom monitoring, face detection, student attention, AI education, computer vision" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loader" class="loader-overlay">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <span class="loader-icon">🎯</span>
+        <span>EduFocus <span class="accent-text">AI</span></span>
+      </div>
+      <div class="loader-bar">
+        <div class="loader-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">
+        <span class="logo-icon">🎓</span>
+        EduFocus <span class="accent">AI</span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active" onclick="closeMenu()">Home</a>
+        <a href="#about" class="nav-link" onclick="closeMenu()">About</a>
+        <a href="#features" class="nav-link" onclick="closeMenu()">Features</a>
+        <a href="#identification" class="nav-link" onclick="closeMenu()">Identification</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE OVERLAY -->
+  <div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
+
+  <!-- ═══════════════════ HERO SECTION ═══════════════════ -->
+  <section id="home" class="hero-section">
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+
+    <div class="hero-container">
+      <div class="hero-content" data-aos="fade-right">
+        <div class="hero-badge">
+          <span class="badge-dot"></span> Live AI Monitoring
+        </div>
+        <h1 class="hero-title">
+          Smart AI-Powered<br />
+          <span class="gradient-text">Classroom Attention</span><br />
+          Monitoring
+        </h1>
+        <p class="hero-subtitle">
+          Monitor student engagement in real-time using face-based computer vision technology. Gain deep insights into
+          classroom attention patterns instantly.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="takePhotoBtn" onclick="scrollToIdentification('camera')">
+            <span>📷</span> Take Photo
+          </button>
+          <button class="btn btn-secondary" id="uploadPhotoBtn" onclick="scrollToIdentification('upload')">
+            <span>📁</span> Upload Photo
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num" data-count="98">0</span><span>%</span>
+            <span class="stat-label">Accuracy</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num" data-count="30">0</span><span>+</span>
+            <span class="stat-label">Real-time FPS</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num" data-count="50">0</span><span>+</span>
+            <span class="stat-label">Students/Frame</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-aos="fade-left">
+        <div class="classroom-illustration">
+          <div class="classroom-grid">
+            <!-- Row 1 -->
+            <div class="student-card attentive" style="--delay:0s">
+              <div class="face-box attentive-box">
+                <div class="face-emoji">😊</div>
+                <div class="detection-corner tl"></div>
+                <div class="detection-corner tr"></div>
+                <div class="detection-corner bl"></div>
+                <div class="detection-corner br"></div>
+              </div>
+              <div class="status-tag attentive-tag">✓ Attentive</div>
+            </div>
+            <div class="student-card neutral" style="--delay:0.2s">
+              <div class="face-box neutral-box">
+                <div class="face-emoji">😐</div>
+                <div class="detection-corner tl"></div>
+                <div class="detection-corner tr"></div>
+                <div class="detection-corner bl"></div>
+                <div class="detection-corner br"></div>
+              </div>
+              <div class="status-tag neutral-tag">~ Neutral</div>
+            </div>
+            <!-- Row 2 -->
+            <div class="student-card distracted" style="--delay:0.6s">
+              <div class="face-box distracted-box">
+                <div class="face-emoji">😴</div>
+                <div class="detection-corner tl"></div>
+                <div class="detection-corner tr"></div>
+                <div class="detection-corner bl"></div>
+                <div class="detection-corner br"></div>
+              </div>
+              <div class="status-tag distracted-tag">✗ Distracted</div>
+            </div>
+
+            <!-- Live indicator -->
+            <div class="live-overlay">
+              <div class="live-badge">
+                <span class="live-dot"></span> LIVE DETECTION
+              </div>
+              <div class="attention-meter">
+                <span>Avg Attention</span>
+                <div class="meter-bar">
+                  <div class="meter-fill" style="width: 75%"></div>
+                </div>
+                <span class="meter-val">75%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <!-- ═══════════════════ QUOTES SLIDER ═══════════════════ -->
+  <section class="quotes-section">
+    <div class="quotes-container">
+      <div class="quotes-header">
+        <span class="section-badge">Inspiration</span>
+        <h2>Words That Drive Learning</h2>
+      </div>
+      <div class="slider-wrapper">
+        <div class="slider-track" id="sliderTrack">
+          <div class="quote-slide active">
+            <div class="quote-icon">"</div>
+            <p class="quote-text">Attention is the beginning of learning.</p>
+            <div class="quote-author">— Education Wisdom</div>
+          </div>
+          <div class="quote-slide">
+            <div class="quote-icon">"</div>
+            <p class="quote-text">Focused students build brighter futures.</p>
+            <div class="quote-author">— EduFocus AI</div>
+          </div>
+          <div class="quote-slide">
+            <div class="quote-icon">"</div>
+            <p class="quote-text">Where attention goes, knowledge grows.</p>
+            <div class="quote-author">— Learning Science</div>
+          </div>
+          <div class="quote-slide">
+            <div class="quote-icon">"</div>
+            <p class="quote-text">Engaged minds create successful outcomes.</p>
+            <div class="quote-author">— Classroom Innovation</div>
+          </div>
+        </div>
+        <div class="slider-dots" id="sliderDots">
+          <button class="dot active" onclick="goToSlide(0)" aria-label="Quote 1"></button>
+          <button class="dot" onclick="goToSlide(1)" aria-label="Quote 2"></button>
+          <button class="dot" onclick="goToSlide(2)" aria-label="Quote 3"></button>
+          <button class="dot" onclick="goToSlide(3)" aria-label="Quote 4"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FEATURES SECTION ═══════════════════ -->
+  <section id="features" class="features-section">
+    <div class="section-container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Capabilities</span>
+        <h2 class="section-title">Powerful AI Features</h2>
+        <p class="section-subtitle">State-of-the-art computer vision meets intelligent classroom analytics</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:1">
+          <div class="feature-icon-wrap" style="--clr:#06B6D4">
+            <span class="feature-icon">📷</span>
+          </div>
+          <h3>Multi-Face Detection</h3>
+          <p>Simultaneously detect and track multiple student faces in a single classroom frame with high precision.</p>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:2">
+          <div class="feature-icon-wrap" style="--clr:#1E3A8A">
+            <span class="feature-icon">👀</span>
+          </div>
+          <h3>Eye Gaze Tracking</h3>
+          <p>Advanced eye gaze estimation identifies where each student is looking, determining focus direction.</p>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:3">
+          <div class="feature-icon-wrap" style="--clr:#8B5CF6">
+            <span class="feature-icon">🧠</span>
+          </div>
+          <h3>Head Pose Estimation</h3>
+          <p>3D head orientation analysis reveals whether students are engaged or distracted from the lesson.</p>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:4">
+          <div class="feature-icon-wrap" style="--clr:#22C55E">
+            <span class="feature-icon">📊</span>
+          </div>
+          <h3>Real-Time Analytics</h3>
+          <p>Live attention metrics and dashboards updated every second for immediate classroom insights.</p>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:5">
+          <div class="feature-icon-wrap" style="--clr:#F59E0B">
+            <span class="feature-icon">📈</span>
+          </div>
+          <h3>Engagement Reports</h3>
+          <p>Generate comprehensive per-session and per-student engagement reports for educator review.</p>
+          <div class="card-glow"></div>
+        </div>
+
+        <div class="feature-card glass-card" data-aos="fade-up" style="--i:6">
+          <div class="feature-icon-wrap" style="--clr:#EF4444">
+            <span class="feature-icon">📱</span>
+          </div>
+          <h3>Responsive AI Dashboard</h3>
+          <p>Access the full attention dashboard on any device — desktop, tablet, or mobile — seamlessly.</p>
+          <div class="card-glow"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ IDENTIFICATION SECTION ═══════════════════ -->
+  <section id="identification" class="id-section">
+    <div class="section-container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Detection</span>
+        <h2 class="section-title">AI-Based Attention Detection</h2>
+        <p class="section-subtitle">Capture or upload a classroom photo to analyze student attention levels instantly
+        </p>
+      </div>
+
+      <div class="id-layout">
+        <!-- INPUT PANEL -->
+        <div class="id-input-panel glass-card" data-aos="fade-right">
+          <div class="input-tabs">
+            <button class="input-tab active" id="tabCamera" onclick="switchTab('camera')">
+              <span>📸</span> Take Photo
+            </button>
+            <button class="input-tab" id="tabUpload" onclick="switchTab('upload')">
+              <span>📁</span> Upload Photo
+            </button>
+          </div>
+
+          <!-- Camera Tab -->
+          <div class="tab-content active" id="cameraContent">
+            <div class="camera-area" id="cameraArea">
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <div class="cam-icon">📹</div>
+                <p>Camera preview will appear here</p>
+                <small>Click "Start Camera" to begin</small>
+              </div>
+              <video id="videoFeed" autoplay playsinline style="display:none;"></video>
+              <canvas id="captureCanvas" style="display:none;"></canvas>
+            </div>
+            <div class="camera-controls">
+              <button class="btn btn-primary" id="startCamBtn" onclick="startCamera()">
+                🎥 Start Camera
+              </button>
+              <button class="btn btn-secondary" id="captureBtn" onclick="capturePhoto()" style="display:none;">
+                📸 Capture
+              </button>
+              <button class="btn btn-outline" id="stopCamBtn" onclick="stopCamera()" style="display:none;">
+                ⏹ Stop
+              </button>
+            </div>
+          </div>
+
+          <!-- Upload Tab -->
+          <div class="tab-content" id="uploadContent">
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()"
+              ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+              <div class="upload-icon">📂</div>
+              <p class="upload-main">Drop your image here</p>
+              <p class="upload-sub">or click to browse files</p>
+              <small>Supports: JPG, PNG, WEBP – Max 10MB</small>
+              <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)"
+                style="display:none;" />
+            </div>
+          </div>
+
+          <button class="btn btn-analyze" id="analyzeBtn" onclick="runAnalysis()">
+            🔍 Analyze Attention
+          </button>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="id-results-panel" data-aos="fade-left">
+          <div class="results-card glass-card">
+            <h3 class="results-title">Detection Preview</h3>
+            <div class="preview-area" id="previewArea">
+              <div class="preview-placeholder">
+                <span>🖼</span>
+                <p>Results will appear here after analysis</p>
+              </div>
+            </div>
+
+            <!-- Attention Bars -->
+            <div class="attention-scores" id="attentionScores" style="display:none;">
+              <h4>Attention Analysis</h4>
+
+              <div class="score-row">
+                <div class="score-label">
+                  <span class="score-dot attentive-dot"></span>
+                  <span>Attentive</span>
+                </div>
+                <div class="score-bar-wrap">
+                  <div class="score-bar attentive-bar" id="attentiveBar" style="width:0%"></div>
+                </div>
+                <span class="score-pct" id="attentivePct">0%</span>
+              </div>
+
+              <div class="score-row">
+                <div class="score-label">
+                  <span class="score-dot neutral-dot"></span>
+                  <span>Neutral</span>
+                </div>
+                <div class="score-bar-wrap">
+                  <div class="score-bar neutral-bar" id="neutralBar" style="width:0%"></div>
+                </div>
+                <span class="score-pct" id="neutralPct">0%</span>
+              </div>
+
+              <div class="score-row">
+                <div class="score-label">
+                  <span class="score-dot distracted-dot"></span>
+                  <span>Distracted</span>
+                </div>
+                <div class="score-bar-wrap">
+                  <div class="score-bar distracted-bar" id="distractedBar" style="width:0%"></div>
+                </div>
+                <span class="score-pct" id="distractedPct">0%</span>
+              </div>
+
+              <div class="overall-attention">
+                <div class="overall-label">Overall Attention Score</div>
+                <div class="overall-circle">
+                  <svg viewBox="0 0 120 120" class="circle-svg">
+                    <circle cx="60" cy="60" r="50" class="circle-bg" />
+                    <circle cx="60" cy="60" r="50" class="circle-fill" id="circleProgress" stroke-dasharray="314"
+                      stroke-dashoffset="314" />
+                  </svg>
+                  <div class="circle-text" id="circleText">0%</div>
+                </div>
+              </div>
+
+              <div class="result-legend">
+                <div class="legend-item"><span class="legend-dot" style="background:#22C55E"></span> Green = Attentive
+                </div>
+                <div class="legend-item"><span class="legend-dot" style="background:#F59E0B"></span> Yellow = Neutral
+                </div>
+                <div class="legend-item"><span class="legend-dot" style="background:#EF4444"></span> Red = Distracted
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div>
+  </div>
+  </section>
+
+  <!-- ═══════════════════ ABOUT SECTION ═══════════════════ -->
+  <section id="about" class="about-section">
+    <div class="section-container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Who We Are</span>
+        <h2 class="section-title">About EduFocus AI</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card glass-card" data-aos="fade-up" style="--i:1">
+          <div class="about-icon">🤖</div>
+          <h3>EduFocus AI</h3>
+          <p>EduFocus AI is an intelligent classroom monitoring system that uses computer vision and deep learning to
+            analyze student attention in real-time. Our platform bridges education and technology to foster better
+            learning environments.</p>
+          <div class="about-tags">
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Deep Learning</span>
+            <span class="tag">Real-time AI</span>
+          </div>
+        </div>
+
+        <div class="about-card glass-card" data-aos="fade-up" style="--i:2">
+          <div class="about-icon">🎯</div>
+          <h3>Our Mission</h3>
+          <p>To empower educators with AI-driven insights that improve classroom engagement and learning outcomes. We
+            believe every student deserves a personalized, attentive educational experience supported by intelligent
+            technology.</p>
+          <div class="about-tags">
+            <span class="tag">AI Insights</span>
+            <span class="tag">Engagement</span>
+            <span class="tag">Outcomes</span>
+          </div>
+        </div>
+
+        <div class="about-card glass-card" data-aos="fade-up" style="--i:3">
+          <div class="about-icon">🌍</div>
+          <h3>Our Vision</h3>
+          <p>To create smart classrooms where technology supports personalized and adaptive learning experiences. We
+            envision a future where every educator has the tools to reach every student at the right moment of need.</p>
+          <div class="about-tags">
+            <span class="tag">Smart Classrooms</span>
+            <span class="tag">Adaptive Learning</span>
+            <span class="tag">Future Ed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="about-stats-bar" data-aos="fade-up">
+        <div class="astat">
+          <span class="astat-num" data-count="500">0</span><span>+</span>
+          <div class="astat-label">Classrooms Monitored</div>
+        </div>
+        <div class="astat-sep"></div>
+        <div class="astat">
+          <span class="astat-num" data-count="10000">0</span><span>+</span>
+          <div class="astat-label">Students Analyzed</div>
+        </div>
+        <div class="astat-sep"></div>
+        <div class="astat">
+          <span class="astat-num" data-count="98">0</span><span>%</span>
+          <div class="astat-label">Detection Accuracy</div>
+        </div>
+        <div class="astat-sep"></div>
+        <div class="astat">
+          <span class="astat-num" data-count="15">0</span><span>+</span>
+          <div class="astat-label">Partner Institutions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span>🎓</span> EduFocus <span class="accent">AI</span>
+          </div>
+          <p>Empowering educators with AI-driven classroom intelligence for better student engagement and outcomes.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Twitter" class="social-btn">🐦</a>
+            <a href="#" aria-label="LinkedIn" class="social-btn">💼</a>
+            <a href="#" aria-label="GitHub" class="social-btn">💻</a>
+            <a href="#" aria-label="Email" class="social-btn">✉</a>
+          </div>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Navigation</h4>
+          <a href="#home">Home</a>
+          <a href="#features">Features</a>
+          <a href="#identification">Identification</a>
+          <a href="#datasets">Datasets</a>
+          <a href="#about">About</a>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Technology</h4>
+          <span>Computer Vision</span>
+          <span>Deep Learning</span>
+          <span>Face Detection</span>
+          <span>Eye Gaze AI</span>
+          <span>Head Pose AI</span>
+        </div>
+
+        <div class="footer-links-col">
+          <h4>Contact</h4>
+          <span>📧 info@edufocusai.com</span>
+          <span>📞 +1 (800) EDU-FOCUS</span>
+          <span>🌐 www.edufocusai.com</span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 EduFocus AI. All rights reserved.</p>
+        <p>Built with ❤ for smarter classrooms.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top" aria-label="Back to top">
+    ↑
+  </button>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
